@@ -1,2 +1,119 @@
 @import "tailwindcss";
-@plugin "daisyui";
+
+@plugin "daisyui" {
+  themes: false;
+}
+
+@plugin "daisyui/theme" {
+  name: "booknook";
+  default: true;
+  prefersdark: false;
+  color-scheme: light;
+
+  --color-base-100: #fbf7f0;
+  --color-base-200: #f3ece0;
+  --color-base-300: #e7dccb;
+  --color-base-content: #1f2a2e;
+  --color-primary: #2f5d50;
+  --color-primary-content: #fbf7f0;
+  --color-secondary: #c8643b;
+  --color-secondary-content: #fff8f2;
+  --color-accent: #d9a441;
+  --color-accent-content: #2a1f05;
+  --color-neutral: #1f2a2e;
+  --color-neutral-content: #f3ece0;
+  --color-info: #3a7ca5;
+  --color-info-content: #ffffff;
+  --color-success: #4e8b5c;
+  --color-success-content: #ffffff;
+  --color-warning: #d9a441;
+  --color-warning-content: #2a1f05;
+  --color-error: #b5452f;
+  --color-error-content: #ffffff;
+
+  --radius-selector: 1rem;
+  --radius-field: 0.75rem;
+  --radius-box: 1rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+}
+
+@plugin "daisyui/theme" {
+  name: "booknook-dark";
+  default: false;
+  prefersdark: true;
+  color-scheme: dark;
+
+  --color-base-100: #14191a;
+  --color-base-200: #1c2325;
+  --color-base-300: #273033;
+  --color-base-content: #e8e2d6;
+  --color-primary: #7fb59e;
+  --color-primary-content: #10201a;
+  --color-secondary: #e08a5f;
+  --color-secondary-content: #2a130a;
+  --color-accent: #e6b85c;
+  --color-accent-content: #2a1f05;
+  --color-neutral: #0e1213;
+  --color-neutral-content: #e8e2d6;
+  --color-info: #6fa8cc;
+  --color-info-content: #0b1a24;
+  --color-success: #7fb59e;
+  --color-success-content: #10201a;
+  --color-warning: #e6b85c;
+  --color-warning-content: #2a1f05;
+  --color-error: #e07a64;
+  --color-error-content: #2a0e08;
+
+  --radius-selector: 1rem;
+  --radius-field: 0.75rem;
+  --radius-box: 1rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+}
+
+@theme inline {
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+}
+
+@utility container-page {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 80rem;
+  padding-inline: 1rem;
+
+  @media (width >= 40rem) {
+    padding-inline: 1.5rem;
+  }
+
+  @media (width >= 64rem) {
+    padding-inline: 2rem;
+  }
+}
+
+@utility section-space {
+  padding-block: 4rem;
+
+  @media (width >= 48rem) {
+    padding-block: 5rem;
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-base-100 font-sans text-base-content;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-display tracking-tight;
+  }
+}
