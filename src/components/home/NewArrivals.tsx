@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { HiArrowRight } from "react-icons/hi2";
-import BookCard from "@/components/books/BookCard";
+import BookGrid from "@/components/books/BookGrid";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { getLatestBooks } from "@/lib/books";
 import type { Book } from "@/types";
@@ -32,11 +32,7 @@ export default async function NewArrivals() {
           No books on the shelf yet. Be the first to add one!
         </p>
       ) : (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {books.map((book, index) => (
-            <BookCard key={book._id} book={book} priority={index < 3} />
-          ))}
-        </div>
+        <BookGrid books={books} />
       )}
 
       <div className="mt-12 flex justify-center">
