@@ -13,6 +13,12 @@ export const publicLinks: NavLink[] = [
   { href: "/books", label: "All Books" },
 ];
 
+export const privateLinks: NavLink[] = [
+  { href: "/add-book", label: "Add Book" },
+  { href: "/my-books", label: "My Books" },
+  { href: "/my-borrows", label: "My Borrows" },
+];
+
 type NavLinksProps = {
   links: NavLink[];
   vertical?: boolean;

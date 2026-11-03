@@ -3,12 +3,18 @@
 import { useState } from "react";
 import Link from "next/link";
 import { HiOutlineMenuAlt3, HiX } from "react-icons/hi";
+import { useSession } from "@/lib/auth-client";
 import Logo from "./Logo";
-import NavLinks, { publicLinks } from "./NavLinks";
+import NavLinks, { privateLinks, publicLinks } from "./NavLinks";
+import UserMenu from "./UserMenu";
 
 export default function Navbar() {
+  const { data: session, isPending } = useSession();
   const [menuOpen, setMenuOpen] = useState(false);
   const closeMenu = () => setMenuOpen(false);
+
+  const user = session?.user;
+  const links = user ? [...publicLinks, ...privateLinks] : publicLinks;
 
   return (
     <header className="sticky top-0 z-40 border-b border-base-300/70 bg-base-100/85 backdrop-blur-md">
@@ -16,18 +22,24 @@ export default function Navbar() {
         <Logo />
 
         <div className="hidden lg:block">
-          <NavLinks links={publicLinks} />
+          <NavLinks links={links} />
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="hidden items-center gap-2 sm:flex">
-            <Link href="/login" className="btn btn-ghost rounded-full px-5">
-              Login
-            </Link>
-            <Link href="/register" className="btn btn-primary rounded-full px-5">
-              Register
-            </Link>
-          </div>
+          {isPending ? (
+            <span className="skeleton size-10 rounded-full" aria-label="Loading account" />
+          ) : user ? (
+            <UserMenu name={user.name} email={user.email} image={user.image} />
+          ) : (
+            <div className="hidden items-center gap-2 sm:flex">
+              <Link href="/login" className="btn btn-ghost rounded-full px-5">
+                Login
+              </Link>
+              <Link href="/register" className="btn btn-primary rounded-full px-5">
+                Register
+              </Link>
+            </div>
+          )}
 
           <button
             type="button"
@@ -44,15 +56,17 @@ export default function Navbar() {
       {menuOpen && (
         <div className="border-t border-base-300/70 bg-base-100 lg:hidden">
           <div className="container-page flex flex-col gap-4 py-4">
-            <NavLinks links={publicLinks} vertical onNavigate={closeMenu} />
-            <div className="flex gap-2 sm:hidden">
-              <Link href="/login" onClick={closeMenu} className="btn btn-outline flex-1 rounded-full">
-                Login
-              </Link>
-              <Link href="/register" onClick={closeMenu} className="btn btn-primary flex-1 rounded-full">
-                Register
-              </Link>
-            </div>
+            <NavLinks links={links} vertical onNavigate={closeMenu} />
+            {!user && !isPending && (
+              <div className="flex gap-2 sm:hidden">
+                <Link href="/login" onClick={closeMenu} className="btn btn-outline flex-1 rounded-full">
+                  Login
+                </Link>
+                <Link href="/register" onClick={closeMenu} className="btn btn-primary flex-1 rounded-full">
+                  Register
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       )}
