@@ -3,9 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { HiOutlineArrowRightOnRectangle, HiOutlineUserCircle } from "react-icons/hi2";
 import Avatar from "@/components/ui/Avatar";
+import { clearApiToken } from "@/lib/api";
 import { signOut } from "@/lib/auth-client";
 
 type UserMenuProps = {
@@ -16,6 +18,7 @@ type UserMenuProps = {
 
 export default function UserMenu({ name, email, image }: UserMenuProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -44,6 +47,8 @@ export default function UserMenu({ name, email, image }: UserMenuProps) {
       toast.error(error.message || "Logout failed. Please try again.");
       return;
     }
+    clearApiToken();
+    queryClient.clear();
     setOpen(false);
     toast.success("You have been logged out. See you soon!");
     router.push("/");
