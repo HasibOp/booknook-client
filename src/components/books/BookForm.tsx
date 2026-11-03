@@ -21,6 +21,7 @@ type BookFormValues = {
 type BookFormProps = {
   user: { name: string; email: string };
   initial?: Partial<BookInput>;
+  minCopies?: number;
   submitLabel: string;
   savingLabel: string;
   onSave: (data: BookInput) => Promise<void>;
@@ -31,6 +32,7 @@ const DESCRIPTION_MAX = 1000;
 export default function BookForm({
   user,
   initial,
+  minCopies = 1,
   submitLabel,
   savingLabel,
   onSave,
@@ -279,11 +281,22 @@ export default function BookForm({
             className={`input w-full sm:max-w-48 ${errors.totalCopies ? 'input-error' : ''}`}
             {...register('totalCopies', {
               valueAsNumber: true,
-              validate: (value) =>
-                (Number.isInteger(value) && value >= 1 && value <= 100) ||
-                'Enter a whole number from 1 to 100',
+              validate: (value) => {
+                if (!Number.isInteger(value) || value < 1 || value > 100)
+                  return 'Enter a whole number from 1 to 100';
+                return (
+                  value >= minCopies ||
+                  `${minCopies} ${minCopies === 1 ? 'copy is' : 'copies are'} borrowed right now, so enter at least ${minCopies}`
+                );
+              },
             })}
           />
+          {minCopies > 1 && !errors.totalCopies && (
+            <span className='text-xs text-base-content/60'>
+              {minCopies} copies are borrowed right now, so the total can&apos;t
+              go below {minCopies}.
+            </span>
+          )}
         </FormField>
 
         <div className='grid gap-4 rounded-box bg-base-200/60 p-4 sm:grid-cols-2'>
