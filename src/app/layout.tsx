@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Fraunces, Manrope } from "next/font/google";
 import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
+import Providers from "@/providers/Providers";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -32,9 +33,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${fraunces.variable} ${manrope.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
-        <Navbar />
-        <main className="flex flex-1 flex-col">{children}</main>
-        <Footer />
+        <Providers>
+          <Navbar />
+          <main className="flex flex-1 flex-col">{children}</main>
+          <Footer />
+        </Providers>
       </body>
     </html>
   );
