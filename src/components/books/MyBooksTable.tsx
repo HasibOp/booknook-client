@@ -1,8 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { useQuery } from "@tanstack/react-query";
-import { HiOutlineEye, HiOutlinePencilSquare, HiOutlinePlus } from "react-icons/hi2";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { HiOutlineEye, HiOutlinePencilSquare, HiOutlinePlus, HiOutlineTrash } from "react-icons/hi2";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 import EmptyState from "@/components/ui/EmptyState";
 import Spinner from "@/components/ui/Spinner";
 import { apiErrorMessage, secureApi } from "@/lib/api";
@@ -21,7 +24,7 @@ function Copies({ book }: { book: Book }) {
   );
 }
 
-function Actions({ book }: { book: Book }) {
+function Actions({ book, onDelete }: { book: Book; onDelete: (book: Book) => void }) {
   return (
     <div className="flex flex-wrap gap-2">
       <Link
@@ -40,14 +43,44 @@ function Actions({ book }: { book: Book }) {
         <HiOutlinePencilSquare className="size-4" />
         Edit
       </Link>
+      <button
+        type="button"
+        onClick={() => onDelete(book)}
+        className="btn btn-error btn-sm btn-soft rounded-full"
+        aria-label={`Delete ${book.title}`}
+      >
+        <HiOutlineTrash className="size-4" />
+        Delete
+      </button>
     </div>
   );
 }
 
 export default function MyBooksTable() {
+  const queryClient = useQueryClient();
+  const [toDelete, setToDelete] = useState<Book | null>(null);
   const { data: books, error, isPending, isFetching, refetch } = useQuery({
     queryKey: ["my-books"],
     queryFn: async () => (await secureApi.get<Book[]>("/books", { params: { mine: true } })).data,
+  });
+
+  const deleteBook = useMutation({
+    mutationFn: async (book: Book) => {
+      await secureApi.delete(`/books/${book._id}`);
+      return book;
+    },
+    onSuccess: (book) => {
+      queryClient.setQueryData<Book[]>(["my-books"], (list) => list?.filter((item) => item._id !== book._id));
+      queryClient.removeQueries({ queryKey: ["book", book._id] });
+      queryClient.invalidateQueries({ queryKey: ["my-borrows"] });
+      toast.success(`"${book.title}" has been removed from BookNook.`);
+      setToDelete(null);
+    },
+    onError: (error) => {
+      toast.error(apiErrorMessage(error, "Could not delete the book. Please try again."));
+      setToDelete(null);
+      queryClient.invalidateQueries({ queryKey: ["my-books"] });
+    },
   });
 
   if (isPending) return <Spinner label="Loading your books..." />;
@@ -126,7 +159,7 @@ export default function MyBooksTable() {
                 <td className="whitespace-nowrap text-sm">{dateFormat.format(new Date(book.createdAt))}</td>
                 <td>
                   <div className="flex justify-end">
-                    <Actions book={book} />
+                    <Actions book={book} onDelete={setToDelete} />
                   </div>
                 </td>
               </tr>
@@ -151,11 +184,35 @@ export default function MyBooksTable() {
                 <Copies book={book} />
               </div>
               <p className="text-xs text-base-content/60">Added {dateFormat.format(new Date(book.createdAt))}</p>
-              <Actions book={book} />
+              <Actions book={book} onDelete={setToDelete} />
             </div>
           </li>
         ))}
       </ul>
+
+      {toDelete && (
+        <ConfirmModal
+          title="Delete this book?"
+          confirmLabel="Yes, Delete"
+          pendingLabel="Deleting..."
+          pending={deleteBook.isPending}
+          icon={HiOutlineTrash}
+          onConfirm={() => deleteBook.mutate(toDelete)}
+          onClose={() => setToDelete(null)}
+        >
+          <p>
+            <strong className="text-base-content">&ldquo;{toDelete.title}&rdquo;</strong> will be removed from
+            BookNook for good. This can&apos;t be undone.
+          </p>
+          {toDelete.availableCopies < toDelete.totalCopies && (
+            <p className="mt-3 rounded-field bg-warning/10 p-3 text-sm text-warning-content">
+              {toDelete.totalCopies - toDelete.availableCopies === 1
+                ? "1 copy is borrowed right now. That borrow will be cleared too."
+                : `${toDelete.totalCopies - toDelete.availableCopies} copies are borrowed right now. Those borrows will be cleared too.`}
+            </p>
+          )}
+        </ConfirmModal>
+      )}
     </div>
   );
 }
