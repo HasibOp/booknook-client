@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { HiOutlineEye, HiOutlineEyeSlash, HiOutlineInformationCircle } from "react-icons/hi2";
 import { signIn } from "@/lib/auth-client";
+import { hardNavigate } from "@/lib/flash";
 import { EMAIL_PATTERN } from "@/lib/validators";
 import FormField from "./FormField";
 import GoogleButton from "./GoogleButton";
@@ -22,7 +22,6 @@ type LoginFormProps = {
 };
 
 export default function LoginForm({ redirectTo, googleError }: LoginFormProps) {
-  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [formError, setFormError] = useState(
     googleError ? "Google sign-in was cancelled or failed. Please try again." : "",
@@ -52,9 +51,7 @@ export default function LoginForm({ redirectTo, googleError }: LoginFormProps) {
       return;
     }
 
-    toast.success(`Welcome back, ${data?.user.name ?? "reader"}!`);
-    router.replace(redirectTo);
-    router.refresh();
+    hardNavigate(redirectTo, { type: "success", message: `Welcome back, ${data?.user.name ?? "reader"}!` });
   };
 
   const handleForgotPassword = () => {

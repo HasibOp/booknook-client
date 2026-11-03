@@ -2,13 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { HiOutlineArrowRightOnRectangle, HiOutlineUserCircle } from "react-icons/hi2";
 import Avatar from "@/components/ui/Avatar";
 import { clearApiToken } from "@/lib/api";
 import { signOut } from "@/lib/auth-client";
+import { hardNavigate } from "@/lib/flash";
 
 type UserMenuProps = {
   name: string;
@@ -17,7 +17,6 @@ type UserMenuProps = {
 };
 
 export default function UserMenu({ name, email, image }: UserMenuProps) {
-  const router = useRouter();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
@@ -25,16 +24,16 @@ export default function UserMenu({ name, email, image }: UserMenuProps) {
 
   useEffect(() => {
     if (!open) return;
-    const handlePointer = (event: MouseEvent) => {
+    const handlePointer = (event: PointerEvent) => {
       if (!menuRef.current?.contains(event.target as Node)) setOpen(false);
     };
     const handleKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") setOpen(false);
     };
-    document.addEventListener("mousedown", handlePointer);
+    document.addEventListener("pointerdown", handlePointer, true);
     document.addEventListener("keydown", handleKey);
     return () => {
-      document.removeEventListener("mousedown", handlePointer);
+      document.removeEventListener("pointerdown", handlePointer, true);
       document.removeEventListener("keydown", handleKey);
     };
   }, [open]);
@@ -50,9 +49,7 @@ export default function UserMenu({ name, email, image }: UserMenuProps) {
     clearApiToken();
     queryClient.clear();
     setOpen(false);
-    toast.success("You have been logged out. See you soon!");
-    router.push("/");
-    router.refresh();
+    hardNavigate("/", { type: "success", message: "You have been logged out. See you soon!" });
   };
 
   return (

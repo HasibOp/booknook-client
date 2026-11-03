@@ -5,10 +5,10 @@ import { HiOutlineEnvelope, HiOutlineMapPin, HiOutlinePhone } from "react-icons/
 import Logo from "./Logo";
 
 const exploreLinks = [
-  { href: "/", label: "Home" },
-  { href: "/books", label: "All Books" },
-  { href: "/add-book", label: "Add a Book" },
-  { href: "/my-borrows", label: "My Borrows" },
+  { href: "/", label: "Home", isPrivate: false },
+  { href: "/books", label: "All Books", isPrivate: false },
+  { href: "/add-book", label: "Add a Book", isPrivate: true },
+  { href: "/my-borrows", label: "My Borrows", isPrivate: true },
 ];
 
 const categories = ["Fiction", "Science", "History", "Kids", "Others"];
@@ -65,9 +65,13 @@ export default function Footer() {
         <div>
           <FooterHeading>Explore</FooterHeading>
           <ul className="flex flex-col gap-2.5 text-sm">
-            {exploreLinks.map(({ href, label }) => (
+            {exploreLinks.map(({ href, label, isPrivate }) => (
               <li key={href}>
-                <Link href={href} className="text-neutral-content/80 transition-colors hover:text-secondary">
+                <Link
+                  href={href}
+                  prefetch={isPrivate ? false : undefined}
+                  className="text-neutral-content/80 transition-colors hover:text-secondary"
+                >
                   {label}
                 </Link>
               </li>
