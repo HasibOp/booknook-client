@@ -1,8 +1,7 @@
 import axios, { type AxiosError, type InternalAxiosRequestConfig } from "axios";
 import toast from "react-hot-toast";
 import { authClient } from "./auth-client";
-
-export const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+import { API_URL } from "./config";
 
 export const publicApi = axios.create({ baseURL: API_URL, timeout: 15000 });
 export const secureApi = axios.create({ baseURL: API_URL, timeout: 15000 });
