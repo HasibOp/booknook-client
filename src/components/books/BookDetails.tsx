@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
@@ -7,6 +8,7 @@ import {
   HiArrowLeft,
   HiOutlineBookOpen,
   HiOutlineCalendarDays,
+  HiOutlineCheckCircle,
   HiOutlineNoSymbol,
   HiOutlineSquare3Stack3D,
 } from "react-icons/hi2";
@@ -14,8 +16,9 @@ import Avatar from "@/components/ui/Avatar";
 import EmptyState from "@/components/ui/EmptyState";
 import Spinner from "@/components/ui/Spinner";
 import { apiErrorMessage, secureApi } from "@/lib/api";
-import type { Book } from "@/types";
+import type { Book, Borrow } from "@/types";
 import BookCover from "./BookCover";
+import BorrowModal from "./BorrowModal";
 
 const dateFormat = new Intl.DateTimeFormat("en-US", { dateStyle: "long" });
 
@@ -24,7 +27,14 @@ function isMissing(error: unknown) {
   return status === 400 || status === 404;
 }
 
-export default function BookDetails({ id }: { id: string }) {
+type BookDetailsProps = {
+  id: string;
+  user: { name: string; email: string };
+};
+
+export default function BookDetails({ id, user }: BookDetailsProps) {
+  const [borrowOpenedAt, setBorrowOpenedAt] = useState<number | null>(null);
+
   const {
     data: book,
     error,
@@ -35,6 +45,11 @@ export default function BookDetails({ id }: { id: string }) {
     queryKey: ["book", id],
     queryFn: async () => (await secureApi.get<Book>(`/books/${id}`)).data,
     retry: (count, err) => !isMissing(err) && count < 1,
+  });
+
+  const myBorrows = useQuery({
+    queryKey: ["my-borrows"],
+    queryFn: async () => (await secureApi.get<Borrow[]>("/borrows")).data,
   });
 
   if (isPending) return <Spinner label="Opening the book..." fullPage />;
@@ -68,6 +83,7 @@ export default function BookDetails({ id }: { id: string }) {
 
   const available = book.availableCopies > 0;
   const copyWord = book.totalCopies === 1 ? "copy" : "copies";
+  const myBorrow = myBorrows.data?.find((borrow) => borrow.bookId === book._id);
 
   return (
     <div className="flex flex-col gap-8">
@@ -157,9 +173,36 @@ export default function BookDetails({ id }: { id: string }) {
             </div>
           </dl>
 
+          {myBorrow && (
+            <div role="status" className="alert alert-info alert-soft">
+              <HiOutlineCheckCircle className="size-6 shrink-0" />
+              <span>
+                You borrowed this book on {dateFormat.format(new Date(myBorrow.borrowDate))}. Please return it by{" "}
+                <strong>{dateFormat.format(new Date(myBorrow.returnDate))}</strong>.{" "}
+                <Link href="/my-borrows" className="font-semibold underline">
+                  Go to My Borrows
+                </Link>
+              </span>
+            </div>
+          )}
+
           <div className="flex flex-col gap-3 sm:flex-row">
-            {available ? (
-              <button type="button" className="btn btn-primary btn-lg rounded-full px-8">
+            {myBorrows.isPending ? (
+              <button type="button" disabled className="btn btn-lg rounded-full px-8">
+                <span className="loading loading-spinner loading-sm" />
+                Checking your borrows...
+              </button>
+            ) : myBorrow ? (
+              <button type="button" disabled className="btn btn-lg rounded-full px-8">
+                <HiOutlineCheckCircle className="size-5" />
+                Already Borrowed
+              </button>
+            ) : available ? (
+              <button
+                type="button"
+                onClick={() => setBorrowOpenedAt(Date.now())}
+                className="btn btn-primary btn-lg rounded-full px-8"
+              >
                 <HiOutlineBookOpen className="size-5" />
                 Borrow This Book
               </button>
@@ -176,6 +219,10 @@ export default function BookDetails({ id }: { id: string }) {
           </div>
         </div>
       </article>
+
+      {borrowOpenedAt !== null && (
+        <BorrowModal book={book} user={user} openedAt={borrowOpenedAt} onClose={() => setBorrowOpenedAt(null)} />
+      )}
     </div>
   );
 }
