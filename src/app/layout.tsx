@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Fraunces, Manrope } from "next/font/google";
+import Navbar from "@/components/layout/Navbar";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -29,7 +30,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       data-theme="booknook"
       className={`${fraunces.variable} ${manrope.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        <Navbar />
+        <main className="flex flex-1 flex-col">{children}</main>
+      </body>
     </html>
   );
 }
