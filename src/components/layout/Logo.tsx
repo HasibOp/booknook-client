@@ -4,6 +4,11 @@ type LogoProps = {
   className?: string;
 };
 
+type BrandProps = LogoProps & {
+  textClassName?: string;
+  accentClassName?: string;
+};
+
 export function LogoMark({ className = "size-9" }: LogoProps) {
   return (
     <svg viewBox="0 0 40 40" className={className} aria-hidden="true">
@@ -22,12 +27,16 @@ export function LogoMark({ className = "size-9" }: LogoProps) {
   );
 }
 
-export default function Logo({ className = "" }: LogoProps) {
+export default function Logo({
+  className = "",
+  textClassName = "text-base-content",
+  accentClassName = "text-primary",
+}: BrandProps) {
   return (
     <Link href="/" className={`flex items-center gap-2.5 ${className}`} aria-label="BookNook home">
       <LogoMark />
-      <span className="font-display text-2xl font-semibold tracking-tight text-base-content">
-        Book<span className="text-primary">Nook</span>
+      <span className={`font-display text-2xl font-semibold tracking-tight ${textClassName}`}>
+        Book<span className={accentClassName}>Nook</span>
       </span>
     </Link>
   );
