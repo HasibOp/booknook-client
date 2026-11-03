@@ -1,9 +1,9 @@
-import Link from "next/link";
-import { HiArrowRight } from "react-icons/hi2";
-import BookGrid from "@/components/books/BookGrid";
-import SectionHeading from "@/components/ui/SectionHeading";
-import { getLatestBooks } from "@/lib/books";
-import type { Book } from "@/types";
+import Link from 'next/link';
+import { HiArrowRight } from 'react-icons/hi2';
+import BookGrid from '@/components/books/BookGrid';
+import SectionHeading from '@/components/ui/SectionHeading';
+import { getLatestBooks } from '@/lib/books';
+import type { Book } from '@/types';
 
 export default async function NewArrivals() {
   let books: Book[] = [];
@@ -16,29 +16,36 @@ export default async function NewArrivals() {
   }
 
   return (
-    <section className="container-page section-space">
+    <section className='container-page section-space'>
       <SectionHeading
-        eyebrow="Fresh on the shelf"
-        title="New Arrivals"
-        subtitle="The six newest books our readers have added to BookNook. Grab one before someone else does."
+        eyebrow='Fresh on the shelf'
+        title='New Arrivals'
+        subtitle='The six newest books our readers have added to BookNook. Grab one before someone else does.'
       />
 
       {failed ? (
-        <div role="alert" className="alert alert-warning alert-soft mx-auto max-w-xl justify-center text-center">
-          We couldn&apos;t load the newest books right now. Please refresh the page in a moment.
+        <div
+          role='alert'
+          className='alert alert-warning alert-soft mx-auto max-w-xl justify-center text-center'
+        >
+          We couldn&apos;t load the newest books right now. Please refresh the
+          page in a moment.
         </div>
       ) : books.length === 0 ? (
-        <p className="text-center text-base-content/70">
+        <p className='text-center text-base-content/70'>
           No books on the shelf yet. Be the first to add one!
         </p>
       ) : (
         <BookGrid books={books} />
       )}
 
-      <div className="mt-12 flex justify-center">
-        <Link href="/books" className="btn btn-primary btn-lg rounded-full px-8">
+      <div className='mt-12 flex justify-center'>
+        <Link
+          href='/books'
+          className='btn btn-primary btn-lg rounded-full px-8'
+        >
           See All Books
-          <HiArrowRight className="size-5" />
+          <HiArrowRight className='size-5' />
         </Link>
       </div>
     </section>

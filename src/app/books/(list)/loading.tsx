@@ -1,5 +1,5 @@
-import Spinner from "@/components/ui/Spinner";
+import Spinner from '@/components/ui/Spinner';
 
 export default function Loading() {
-  return <Spinner label="Loading books..." fullPage />;
+  return <Spinner label='Loading books...' fullPage />;
 }

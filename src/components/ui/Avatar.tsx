@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Image from "next/image";
+import { useState } from 'react';
+import Image from 'next/image';
 
 type AvatarProps = {
   name?: string | null;
@@ -11,11 +11,16 @@ type AvatarProps = {
 };
 
 function initialsOf(name?: string | null) {
-  const parts = (name || "Reader").trim().split(/\s+/).slice(0, 2);
-  return parts.map((part) => part[0]?.toUpperCase() ?? "").join("");
+  const parts = (name || 'Reader').trim().split(/\s+/).slice(0, 2);
+  return parts.map((part) => part[0]?.toUpperCase() ?? '').join('');
 }
 
-export default function Avatar({ name, src, size = 40, className = "" }: AvatarProps) {
+export default function Avatar({
+  name,
+  src,
+  size = 40,
+  className = '',
+}: AvatarProps) {
   const [failedSrc, setFailedSrc] = useState<string | null>(null);
   const showImage = Boolean(src) && failedSrc !== src;
 
@@ -27,16 +32,16 @@ export default function Avatar({ name, src, size = 40, className = "" }: AvatarP
       {showImage ? (
         <Image
           src={src as string}
-          alt={name ? `${name}'s photo` : "Profile photo"}
+          alt={name ? `${name}'s photo` : 'Profile photo'}
           width={size}
           height={size}
           unoptimized
-          referrerPolicy="no-referrer"
+          referrerPolicy='no-referrer'
           onError={() => setFailedSrc(src ?? null)}
-          className="size-full object-cover"
+          className='size-full object-cover'
         />
       ) : (
-        <span className="font-sans text-sm font-bold" aria-hidden="true">
+        <span className='font-sans text-sm font-bold' aria-hidden='true'>
           {initialsOf(name)}
         </span>
       )}

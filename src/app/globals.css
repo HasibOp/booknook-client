@@ -1,11 +1,11 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @plugin "daisyui" {
   themes: false;
 }
 
 @plugin "daisyui/theme" {
-  name: "booknook";
+  name: 'booknook';
   default: true;
   prefersdark: false;
   color-scheme: light;
@@ -42,7 +42,7 @@
 }
 
 @plugin "daisyui/theme" {
-  name: "booknook-dark";
+  name: 'booknook-dark';
   default: false;
   prefersdark: true;
   color-scheme: dark;
@@ -141,7 +141,8 @@
   width: 48px;
   height: 48px;
   border-radius: 9999px;
-  border: 1px solid color-mix(in oklab, var(--color-neutral-content) 35%, transparent);
+  border: 1px solid
+    color-mix(in oklab, var(--color-neutral-content) 35%, transparent);
   background: color-mix(in oklab, var(--color-neutral) 45%, transparent);
   backdrop-filter: blur(6px);
   transition: background 0.2s ease;

@@ -1,6 +1,6 @@
-const FLASH_KEY = "booknook:flash";
+const FLASH_KEY = 'booknook:flash';
 
-export type FlashMessage = { type: "success" | "error"; message: string };
+export type FlashMessage = { type: 'success' | 'error'; message: string };
 
 export function setFlash(flash: FlashMessage) {
   try {

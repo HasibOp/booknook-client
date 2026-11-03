@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { MotionConfig } from "motion/react";
-import { Toaster } from "react-hot-toast";
-import FlashToast from "@/components/ui/FlashToast";
+import { useState } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { MotionConfig } from 'motion/react';
+import { Toaster } from 'react-hot-toast';
+import FlashToast from '@/components/ui/FlashToast';
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
@@ -18,15 +18,26 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <MotionConfig reducedMotion="user">{children}</MotionConfig>
+      <MotionConfig reducedMotion='user'>{children}</MotionConfig>
       <FlashToast />
       <Toaster
-        position="top-center"
+        position='top-center'
         toastOptions={{
           duration: 3500,
-          className: "bg-base-100! text-base-content! rounded-2xl! shadow-lg! border border-base-300",
-          success: { iconTheme: { primary: "var(--color-success)", secondary: "var(--color-base-100)" } },
-          error: { iconTheme: { primary: "var(--color-error)", secondary: "var(--color-base-100)" } },
+          className:
+            'bg-base-100! text-base-content! rounded-2xl! shadow-lg! border border-base-300',
+          success: {
+            iconTheme: {
+              primary: 'var(--color-success)',
+              secondary: 'var(--color-base-100)',
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: 'var(--color-error)',
+              secondary: 'var(--color-base-100)',
+            },
+          },
         }}
       />
     </QueryClientProvider>

@@ -1,6 +1,8 @@
-import { requireUser } from "@/lib/session";
+import { requireUser } from '@/lib/session';
 
-export default async function BookDetailsLayout({ children }: LayoutProps<"/books/[id]">) {
+export default async function BookDetailsLayout({
+  children,
+}: LayoutProps<'/books/[id]'>) {
   await requireUser();
   return children;
 }

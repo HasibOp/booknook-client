@@ -1,4 +1,10 @@
-export const CATEGORIES = ["Fiction", "Science", "History", "Kids", "Others"] as const;
+export const CATEGORIES = [
+  'Fiction',
+  'Science',
+  'History',
+  'Kids',
+  'Others',
+] as const;
 
 export type Category = (typeof CATEGORIES)[number];
 
@@ -16,7 +22,10 @@ export type Book = {
   updatedAt: string;
 };
 
-export type BookInput = Pick<Book, "title" | "author" | "category" | "image" | "description" | "totalCopies">;
+export type BookInput = Pick<
+  Book,
+  'title' | 'author' | 'category' | 'image' | 'description' | 'totalCopies'
+>;
 
 export type Borrow = {
   _id: string;

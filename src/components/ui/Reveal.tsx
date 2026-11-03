@@ -1,17 +1,23 @@
-"use client";
+'use client';
 
-import { motion } from "motion/react";
+import { motion } from 'motion/react';
 
 type RevealProps = {
   children: React.ReactNode;
-  as?: "div" | "li";
+  as?: 'div' | 'li';
   delay?: number;
   y?: number;
   className?: string;
 };
 
-export default function Reveal({ children, as = "div", delay = 0, y = 24, className }: RevealProps) {
-  const Component = as === "li" ? motion.li : motion.div;
+export default function Reveal({
+  children,
+  as = 'div',
+  delay = 0,
+  y = 24,
+  className,
+}: RevealProps) {
+  const Component = as === 'li' ? motion.li : motion.div;
 
   return (
     <Component

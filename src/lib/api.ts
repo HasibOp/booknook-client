@@ -1,7 +1,7 @@
-import axios, { type AxiosError, type InternalAxiosRequestConfig } from "axios";
-import toast from "react-hot-toast";
-import { authClient } from "./auth-client";
-import { API_URL } from "./config";
+import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios';
+import toast from 'react-hot-toast';
+import { authClient } from './auth-client';
+import { API_URL } from './config';
 
 export const publicApi = axios.create({ baseURL: API_URL, timeout: 15000 });
 export const secureApi = axios.create({ baseURL: API_URL, timeout: 15000 });
@@ -11,8 +11,10 @@ let cachedToken: { value: string; expiresAt: number } | null = null;
 
 function expiryOf(token: string) {
   try {
-    const payload = JSON.parse(atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")));
-    return typeof payload.exp === "number" ? payload.exp * 1000 : 0;
+    const payload = JSON.parse(
+      atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')),
+    );
+    return typeof payload.exp === 'number' ? payload.exp * 1000 : 0;
   } catch {
     return 0;
   }
@@ -49,24 +51,29 @@ secureApi.interceptors.response.use(undefined, async (error: AxiosError) => {
     return secureApi(config);
   }
 
-  if (error.response?.status === 401 && typeof window !== "undefined") {
+  if (error.response?.status === 401 && typeof window !== 'undefined') {
     clearApiToken();
     await authClient.signOut();
-    toast.error("Your session has expired. Please log in again.");
+    toast.error('Your session has expired. Please log in again.');
     const here = `${window.location.pathname}${window.location.search}`;
-    const loginUrl = new URL("/login", window.location.origin);
-    loginUrl.searchParams.set("redirect", here);
+    const loginUrl = new URL('/login', window.location.origin);
+    loginUrl.searchParams.set('redirect', here);
     window.location.href = loginUrl.toString();
   }
 
   return Promise.reject(error);
 });
 
-export function apiErrorMessage(error: unknown, fallback = "Something went wrong. Please try again.") {
+export function apiErrorMessage(
+  error: unknown,
+  fallback = 'Something went wrong. Please try again.',
+) {
   if (axios.isAxiosError(error)) {
-    const message = (error.response?.data as { message?: string } | undefined)?.message;
+    const message = (error.response?.data as { message?: string } | undefined)
+      ?.message;
     if (message) return message;
-    if (!error.response) return "Can't reach the BookNook server right now. Please try again in a moment.";
+    if (!error.response)
+      return "Can't reach the BookNook server right now. Please try again in a moment.";
   }
   return fallback;
 }
