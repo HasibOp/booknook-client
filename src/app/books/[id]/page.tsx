@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
-import PagePlaceholder from "@/components/ui/PagePlaceholder";
+import BookDetails from "@/components/books/BookDetails";
 
 export const metadata: Metadata = {
   title: "Book Details",
 };
 
-export default function BookDetailsPage() {
+export default async function BookDetailsPage({ params }: PageProps<"/books/[id]">) {
+  const { id } = await params;
+
   return (
-    <PagePlaceholder
-      eyebrow="Book details"
-      title="About this book"
-      subtitle="The cover, author, description and borrow button for this book will appear here."
-    />
+    <section className="container-page section-space">
+      <BookDetails id={id} />
+    </section>
   );
 }
