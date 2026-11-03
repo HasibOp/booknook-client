@@ -9,6 +9,7 @@ import ConfirmModal from "@/components/ui/ConfirmModal";
 import EmptyState from "@/components/ui/EmptyState";
 import Spinner from "@/components/ui/Spinner";
 import { apiErrorMessage, secureApi } from "@/lib/api";
+import { myBooksQuery } from "@/lib/queries";
 import type { Book } from "@/types";
 import BookCover from "./BookCover";
 
@@ -59,10 +60,7 @@ function Actions({ book, onDelete }: { book: Book; onDelete: (book: Book) => voi
 export default function MyBooksTable() {
   const queryClient = useQueryClient();
   const [toDelete, setToDelete] = useState<Book | null>(null);
-  const { data: books, error, isPending, isFetching, refetch } = useQuery({
-    queryKey: ["my-books"],
-    queryFn: async () => (await secureApi.get<Book[]>("/books", { params: { mine: true } })).data,
-  });
+  const { data: books, error, isPending, isFetching, refetch } = useQuery(myBooksQuery);
 
   const deleteBook = useMutation({
     mutationFn: async (book: Book) => {
@@ -205,7 +203,7 @@ export default function MyBooksTable() {
             BookNook for good. This can&apos;t be undone.
           </p>
           {toDelete.availableCopies < toDelete.totalCopies && (
-            <p className="mt-3 rounded-field bg-warning/10 p-3 text-sm text-warning-content">
+            <p className="mt-3 rounded-field border border-warning/40 bg-warning/10 p-3 text-sm text-base-content">
               {toDelete.totalCopies - toDelete.availableCopies === 1
                 ? "1 copy is borrowed right now. That borrow will be cleared too."
                 : `${toDelete.totalCopies - toDelete.availableCopies} copies are borrowed right now. Those borrows will be cleared too.`}

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { HiOutlineMenuAlt3, HiX } from "react-icons/hi";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 import { useSession } from "@/lib/auth-client";
 import Logo from "./Logo";
 import NavLinks, { privateLinks, publicLinks } from "./NavLinks";
@@ -26,6 +27,7 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           {isPending ? (
             <span className="skeleton size-10 rounded-full" aria-label="Loading account" />
           ) : user ? (

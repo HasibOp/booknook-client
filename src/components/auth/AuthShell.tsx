@@ -1,4 +1,5 @@
 import { LogoMark } from "@/components/layout/Logo";
+import Reveal from "@/components/ui/Reveal";
 
 type AuthShellProps = {
   title: string;
@@ -11,7 +12,7 @@ type AuthShellProps = {
 export default function AuthShell({ title, subtitle, sideTitle, sideText, children }: AuthShellProps) {
   return (
     <section className="container-page section-space flex flex-1 items-center justify-center">
-      <div className="grid w-full max-w-5xl overflow-hidden rounded-box border border-base-300 bg-base-100 shadow-xl lg:grid-cols-[0.9fr_1.1fr]">
+      <Reveal className="grid w-full max-w-5xl overflow-hidden rounded-box border border-base-300 bg-base-100 shadow-xl lg:grid-cols-[0.9fr_1.1fr]">
         <aside className="relative hidden flex-col justify-between gap-10 overflow-hidden bg-primary p-10 text-primary-content lg:flex">
           <div className="absolute -right-16 -top-16 size-56 rounded-full bg-primary-content/10" />
           <div className="absolute -bottom-20 -left-10 size-64 rounded-full bg-secondary/25" />
@@ -32,7 +33,7 @@ export default function AuthShell({ title, subtitle, sideTitle, sideText, childr
           </div>
           {children}
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

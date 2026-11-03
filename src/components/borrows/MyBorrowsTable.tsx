@@ -10,6 +10,7 @@ import ConfirmModal from "@/components/ui/ConfirmModal";
 import EmptyState from "@/components/ui/EmptyState";
 import Spinner from "@/components/ui/Spinner";
 import { apiErrorMessage, secureApi } from "@/lib/api";
+import { myBorrowsQuery } from "@/lib/queries";
 import type { Borrow } from "@/types";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -67,10 +68,7 @@ export default function MyBorrowsTable() {
   const [today] = useState(() => startOfDay(Date.now()));
   const [toReturn, setToReturn] = useState<Borrow | null>(null);
 
-  const { data: borrows, error, isPending, isFetching, refetch } = useQuery({
-    queryKey: ["my-borrows"],
-    queryFn: async () => (await secureApi.get<Borrow[]>("/borrows")).data,
-  });
+  const { data: borrows, error, isPending, isFetching, refetch } = useQuery(myBorrowsQuery);
 
   const returnBook = useMutation({
     mutationFn: async (borrow: Borrow) => {

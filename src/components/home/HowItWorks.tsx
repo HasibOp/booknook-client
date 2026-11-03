@@ -5,6 +5,7 @@ import {
   HiOutlineCalendarDays,
   HiOutlineMagnifyingGlass,
 } from "react-icons/hi2";
+import Reveal from "@/components/ui/Reveal";
 import SectionHeading from "@/components/ui/SectionHeading";
 
 const steps: { icon: IconType; title: string; text: string }[] = [
@@ -42,8 +43,10 @@ export default function HowItWorks() {
 
         <ol className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {steps.map(({ icon: Icon, title, text }, index) => (
-            <li
+            <Reveal
+              as="li"
               key={title}
+              delay={index * 0.1}
               className="relative flex h-full flex-col gap-4 rounded-box border border-base-300 bg-base-100 p-6 shadow-sm"
             >
               <span className="absolute right-5 top-4 font-display text-5xl font-semibold text-base-content/10">
@@ -54,7 +57,7 @@ export default function HowItWorks() {
               </span>
               <h3 className="text-xl font-semibold">{title}</h3>
               <p className="text-sm leading-relaxed text-base-content/70">{text}</p>
-            </li>
+            </Reveal>
           ))}
         </ol>
       </div>

@@ -1,12 +1,12 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import axios from "axios";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import EmptyState from "@/components/ui/EmptyState";
 import Spinner from "@/components/ui/Spinner";
 import { apiErrorMessage, secureApi } from "@/lib/api";
+import { bookQuery, isMissing } from "@/lib/queries";
 import type { Book, BookInput } from "@/types";
 import BookForm from "./BookForm";
 
@@ -15,21 +15,11 @@ type EditBookFormProps = {
   user: { name: string; email: string };
 };
 
-function isMissing(error: unknown) {
-  const status = axios.isAxiosError(error) ? error.response?.status : undefined;
-  return status === 400 || status === 404;
-}
-
 export default function EditBookForm({ id, user }: EditBookFormProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const { data: book, error, isPending } = useQuery({
-    queryKey: ["book", id],
-    queryFn: async () => (await secureApi.get<Book>(`/books/${id}`)).data,
-    staleTime: 0,
-    retry: (count, err) => !isMissing(err) && count < 1,
-  });
+  const { data: book, error, isPending } = useQuery({ ...bookQuery(id), staleTime: 0 });
 
   if (isPending) return <Spinner label="Loading the book..." />;
 

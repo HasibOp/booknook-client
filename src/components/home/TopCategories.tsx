@@ -8,6 +8,7 @@ import {
   HiOutlineLightBulb,
   HiOutlineSparkles,
 } from "react-icons/hi2";
+import Reveal from "@/components/ui/Reveal";
 import SectionHeading from "@/components/ui/SectionHeading";
 import type { Category } from "@/types";
 
@@ -54,24 +55,25 @@ export default function TopCategories() {
       />
 
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
-        {categories.map(({ name, icon: Icon, text, tone }) => (
-          <Link
-            key={name}
-            href={`/books?category=${name}`}
-            className="group flex h-full flex-col gap-4 rounded-box border border-base-300 bg-base-100 p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg"
-          >
-            <span className={`flex size-14 items-center justify-center rounded-2xl ${tone}`}>
-              <Icon className="size-7" />
-            </span>
-            <div className="flex flex-1 flex-col gap-2">
-              <h3 className="text-xl font-semibold">{name}</h3>
-              <p className="text-sm leading-relaxed text-base-content/70">{text}</p>
-            </div>
-            <span className="flex items-center gap-1.5 text-sm font-semibold text-primary">
-              Browse {name}
-              <HiArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
-            </span>
-          </Link>
+        {categories.map(({ name, icon: Icon, text, tone }, index) => (
+          <Reveal key={name} delay={index * 0.08} className="h-full">
+            <Link
+              href={`/books?category=${name}`}
+              className="group flex h-full flex-col gap-4 rounded-box border border-base-300 bg-base-100 p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg"
+            >
+              <span className={`flex size-14 items-center justify-center rounded-2xl ${tone}`}>
+                <Icon className="size-7" />
+              </span>
+              <div className="flex flex-1 flex-col gap-2">
+                <h3 className="text-xl font-semibold">{name}</h3>
+                <p className="text-sm leading-relaxed text-base-content/70">{text}</p>
+              </div>
+              <span className="flex items-center gap-1.5 text-sm font-semibold text-primary">
+                Browse {name}
+                <HiArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+              </span>
+            </Link>
+          </Reveal>
         ))}
       </div>
     </section>

@@ -18,12 +18,12 @@ export default function BookCover({ src, title, author, sizes, priority, classNa
   const failed = !src || failedSrc === src;
 
   return (
-    <div className={`relative aspect-[3/4] w-full overflow-hidden bg-base-200 ${className}`}>
+    <div className={`relative aspect-3/4 w-full overflow-hidden bg-base-200 ${className}`}>
       {failed ? (
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gradient-to-br from-primary to-neutral p-5 text-center text-primary-content">
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-linear-to-br from-neutral via-neutral to-primary/70 p-5 text-center text-neutral-content">
           <LogoMark className="size-10 opacity-80" />
           <p className="line-clamp-3 font-display text-lg font-semibold leading-snug">{title}</p>
-          {author && <p className="text-xs uppercase tracking-widest text-primary-content/70">{author}</p>}
+          {author && <p className="text-xs uppercase tracking-widest text-neutral-content/70">{author}</p>}
         </div>
       ) : (
         <Image

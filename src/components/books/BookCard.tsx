@@ -22,7 +22,7 @@ export default function BookCard({ book, priority }: BookCardProps) {
 
       <div className="flex flex-1 flex-col gap-4 p-5">
         <div className="flex flex-col gap-1">
-          <h3 className="line-clamp-2 min-h-[3.5rem] text-xl font-semibold leading-snug" title={book.title}>
+          <h3 className="line-clamp-2 min-h-14 text-xl font-semibold leading-snug" title={book.title}>
             {book.title}
           </h3>
           <p className="truncate text-sm text-base-content/70">by {book.author}</p>
