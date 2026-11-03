@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import PagePlaceholder from "@/components/ui/PagePlaceholder";
+import MyBooksTable from "@/components/books/MyBooksTable";
+import SectionHeading from "@/components/ui/SectionHeading";
 
 export const metadata: Metadata = {
   title: "My Books",
@@ -7,10 +8,13 @@ export const metadata: Metadata = {
 
 export default function MyBooksPage() {
   return (
-    <PagePlaceholder
-      eyebrow="Your shelf"
-      title="My Books"
-      subtitle="Every book you have added to BookNook will be listed here."
-    />
+    <section className="container-page section-space flex flex-col gap-8">
+      <SectionHeading
+        eyebrow="Your shelf"
+        title="My Books"
+        subtitle="Every book you have shared on BookNook. Edit the details or the number of copies at any time."
+      />
+      <MyBooksTable />
+    </section>
   );
 }
