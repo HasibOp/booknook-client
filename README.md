@@ -28,6 +28,7 @@
 | `/my-borrows`         | Private | Your borrowed books, with Return Book                                 |
 | `/profile`            | Private | Your profile: update your name and photo                              |
 | `/login`, `/register` | Public  | Email/password and Google sign-in                                     |
+| `/privacy`            | Public  | Privacy policy                                                        |
 
 Every route sets its own page title (for example _BookNook | All Books_), and unknown URLs show a custom 404 page.
 
